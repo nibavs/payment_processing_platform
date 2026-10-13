@@ -1,3 +1,11 @@
 package com.payguard.user.dto;
 
-public record AuthResponse() {}
+import lombok.Builder;
+
+@Builder
+public record AuthResponse(
+        String token,
+        String tokenType,
+        long expiresIn,
+        UserResponse userResponse
+) {}

@@ -1,5 +1,6 @@
 package com.payguard.user.entity;
 
+import com.payguard.user.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -51,8 +52,4 @@ public class User {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    public enum Role {
-        MERCHANT,
-        ADMIN
-    }
 }
