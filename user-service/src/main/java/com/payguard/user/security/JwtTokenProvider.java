@@ -1,8 +1,12 @@
 package com.payguard.user.security;
 
 import com.payguard.user.entity.User;
+import com.payguard.user.enums.Role;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +18,8 @@ import java.util.UUID;
 @Component
 public class JwtTokenProvider {
     private final SecretKey key;
+
+    @Getter
     private final long expirationMs;
 
     public JwtTokenProvider(@Value("${jwt.secret}")String secretKey, @Value("${jwt.expiration}") long expirationMs) {
@@ -35,6 +41,31 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    public boolean validateToken(String token) {
+        try {
+            parseToken(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
 
+    public Role getRoleFromToken(String token) {
+        Claims claims = parseToken(token);
+        return claims.get("role", Role.class);
+    }
+
+    public UUID getUserIdFromToken(String token) {
+        Claims claims = parseToken(token);
+        return UUID.fromString(claims.getSubject());
+    }
+
+    private Claims parseToken(String token) {
+        return Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
 
 }
