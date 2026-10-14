@@ -14,8 +14,6 @@
 
     <modules>
         <module>user-service</module>
-        <module>fraud-engine-service</module>
-        <module>notification-service</module>
         <module>payment-service</module>
         <module>api-gateway</module>
     </modules>
