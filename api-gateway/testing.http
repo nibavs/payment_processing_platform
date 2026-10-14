@@ -1,0 +1,32 @@
+POST http://localhost:8080/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "email": "nibavs@mail.ru",
+  "password": "pass1234",
+  "merchantName": "Nibavs",
+  "merchantCategory": "Clothes",
+  "country": "KAz"
+}
+
+###
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "nibavs@mail.ru",
+  "password": "pass1234"
+}
+
+###
+
+POST http://localhost:8080/api/v1/payments/charg
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkMDQ3ZTljMi1kZGFiLTQ5ZmQtYjgxYi04MThlZTdjNWUzNTIiLCJlbWFpbCI6Im5pYmF2c0BtYWlsLnJ1Iiwicm9sZSI6Ik1FUkNIQU5UIiwiaWF0IjoxNzkxOTY3MDQ4LCJleHAiOjE3OTIwNTM0NDh9.PEcPNDHsa0hQMoPx613rhYlwZehf1v-zmp3f0gF6OeJtzIWTz8BZnO7Ap3rwPD9b5MoGOL4ihF9uzeEuw8xBGw
+
+{
+  "amount": 400,
+  "customerEmail": "nibavs@mail.ru"
+}
+###
+
