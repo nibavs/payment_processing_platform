@@ -16,6 +16,8 @@
         <module>user-service</module>
         <module>payment-service</module>
         <module>api-gateway</module>
+        <module>notification-service</module>
+        <module>kafka-events</module>
     </modules>
 
     <!-- ===== SPRING BOOT PARENT ===== -->
@@ -33,9 +35,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-boot.version>4.1.1</spring-boot.version>
         <spring-cloud.version>2025.1.3</spring-cloud.version>
-        <postgres.version>42.7.13</postgres.version>
+        <postgres.version>42.7.14</postgres.version>
         <mapstruct.version>1.6.3</mapstruct.version>
         <jjwt.version>0.13.0</jjwt.version>
+        <jackson.datatype.version>2.22.3</jackson.datatype.version>
     </properties>
 
     <!-- ===== For controlling versions ===== -->
@@ -89,6 +92,12 @@
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt-jackson</artifactId>
                 <version>${jjwt.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jsr310</artifactId>
+                <version>${jackson.datatype.version}</version>
             </dependency>
 
         </dependencies>
