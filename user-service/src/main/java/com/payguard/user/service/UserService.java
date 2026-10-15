@@ -27,6 +27,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserMapper userMapper;
+    private final EventPublisher eventPublisher;
 
     @Transactional
     public AuthResponse register(@Valid RegisterRequest request) {
@@ -46,7 +47,7 @@ public class UserService {
         User savedUser = userRepository.save(user);
         log.info("New merchant registered: {} ({})", savedUser.getEmail(), savedUser.getId());
 
-        // TODO: Publish event to Kafka for welcome notification sending
+        eventPublisher.publishUserRegistered(savedUser);
 
         String generatedToken = jwtTokenProvider.generateToken(savedUser);
 
