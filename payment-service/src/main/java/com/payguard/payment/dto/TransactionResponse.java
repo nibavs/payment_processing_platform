@@ -2,10 +2,6 @@ package com.payguard.payment.dto;
 
 import lombok.Builder;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.UUID;
 
 @Builder
 public record TransactionResponse(
@@ -16,7 +12,8 @@ public record TransactionResponse(
 //        String status,
 //        BigDecimal fraudScore,
 //        String fraudDecision,
-        String customerEmail
+        String customerEmail,
+        String paymentUrl
 //        String description,
 //        Map<String, Object>metadata,
 //        String failureReason,

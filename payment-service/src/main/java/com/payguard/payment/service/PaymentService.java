@@ -13,11 +13,17 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class PaymentService {
+    private final YooKassaService yooKassaService;
+
     public TransactionResponse processPayment(UUID merchantId, @Valid ChargeRequest request) {
+
         log.info("Transaction created. Amount {}, merchantId {}, customerEmail {}", request.amount(), merchantId, request.customerEmail());
+        String paymentUrl = yooKassaService.chargeViaYooKassa(request);
+
         return TransactionResponse.builder()
                 .amount(request.amount())
                 .customerEmail(request.customerEmail())
+                .paymentUrl(paymentUrl)
                 .build();
     }
 }
