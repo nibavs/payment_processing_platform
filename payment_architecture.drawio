@@ -1,0 +1,151 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="payment-architecture" name="Payment Architecture">
+    <mxGraphModel dx="1705" dy="1117" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="microservices" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFDF;strokeColor=#C5C58A;fontColor=#222222;fontSize=14;verticalAlign=top;spacingTop=8;fontStyle=2;" value="Microservices" vertex="1">
+          <mxGeometry height="690" width="820" x="230" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="external" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFDF;strokeColor=#C5C58A;fontColor=#222222;fontSize=14;verticalAlign=top;spacingTop=8;" value="External Services" vertex="1">
+          <mxGeometry height="140" width="170" x="40" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="infrastructure" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFDF;strokeColor=#C5C58A;fontColor=#222222;fontSize=14;verticalAlign=top;spacingTop=8;" value="Infrastructure" vertex="1">
+          <mxGeometry height="210" width="480" x="1090" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="gateway-band" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#2C5593;strokeColor=#82A576;fontColor=#FFFFFF;fontSize=14;verticalAlign=top;spacingTop=5;" value="API Gateway (Spring Cloud)" vertex="1">
+          <mxGeometry height="130" width="610" x="310" y="105" as="geometry" />
+        </mxCell>
+        <mxCell id="JTPxQIag51cQTHmkg5QD-1" edge="1" parent="1" source="client" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="gateway-band">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="client" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EFEBFF;strokeColor=#B5A9D2;fontColor=#222222;fontSize=14;" value="Client&amp;nbsp;" vertex="1">
+          <mxGeometry height="50" width="210" x="505" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="gateway" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EFEBFF;strokeColor=#B5A9D2;fontColor=#222222;fontSize=14;" value="Routing · Rate Limiting ·&lt;br&gt;JWT Validation" vertex="1">
+          <mxGeometry height="70" width="220" x="500" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="user" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EFEBFF;strokeColor=#B5A9D2;fontColor=#222222;fontSize=14;" value="User Service&lt;br&gt;Registration, Auth, RBAC&lt;br&gt;PostgreSQL :8081" vertex="1">
+          <mxGeometry height="90" width="220" x="260" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="payment" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#21A65A;strokeColor=#82B366;fontColor=#FFFFFF;fontSize=14;" value="Payment Service&lt;br&gt;Stripe Integration, Charges, Refunds&lt;br&gt;PostgreSQL :8082" vertex="1">
+          <mxGeometry height="90" width="220" x="600" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="JTPxQIag51cQTHmkg5QD-4" edge="1" parent="1" source="fraud" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=0;" target="redis">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fraud" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#BC302B;strokeColor=#B85450;fontColor=#FFFFFF;fontSize=14;" value="Fraud Engine&lt;br&gt;ML Scoring, Rule Fallback&lt;br&gt;Redis + PostgreSQL :8083" vertex="1">
+          <mxGeometry height="90" width="220" x="820" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="notification" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EFEBFF;strokeColor=#B5A9D2;fontColor=#222222;fontSize=14;" value="Notification Service&lt;br&gt;Email/SMS Alerts&lt;br&gt;PostgreSQL :8084" vertex="1">
+          <mxGeometry height="90" width="220" x="380" y="800" as="geometry" />
+        </mxCell>
+        <mxCell id="reconciliation" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EFEBFF;strokeColor=#B5A9D2;fontColor=#222222;fontSize=14;" value="Reconciliation Service&lt;br&gt;Settlement Matching, Reporting&lt;br&gt;PostgreSQL :8085" vertex="1">
+          <mxGeometry height="130" width="230" x="640" y="800" as="geometry" />
+        </mxCell>
+        <mxCell id="stripe" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1CA2E6;strokeColor=#006EAF;fontSize=14;fontColor=#ffffff;" value="YooKassaAPI" vertex="1">
+          <mxGeometry height="50" width="110" x="70" y="445" as="geometry" />
+        </mxCell>
+        <mxCell id="JTPxQIag51cQTHmkg5QD-3" edge="1" parent="1" source="kafka" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.861;entryY=0.01;entryDx=0;entryDy=0;curved=0;entryPerimeter=0;" target="notification">
+          <mxGeometry relative="1" x="-0.0064" as="geometry">
+            <Array as="points">
+              <mxPoint x="1140" y="732.5" />
+              <mxPoint x="569.4" y="732.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kafka" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F39C12;strokeColor=#FFFFFF;fontColor=#FFFFFF;fontSize=14;" value="Apache Kafka&lt;br&gt;Event Bus" vertex="1">
+          <mxGeometry height="103" width="200" x="1120" y="607" as="geometry" />
+        </mxCell>
+        <mxCell id="redis" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#A680B8;strokeColor=#000000;fontColor=#FFFFFF;fontSize=14;" value="Redis&lt;br&gt;Cache + Counters" vertex="1">
+          <mxGeometry height="115" width="180" x="1360" y="601" as="geometry" />
+        </mxCell>
+        <mxCell id="gateway-user" edge="1" parent="1" source="gateway" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#000000;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0.1;exitY=1;entryX=0.5;entryY=0;" target="user" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="370" y="245" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gateway-payment" edge="1" parent="1" source="gateway" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#000000;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0.7;exitY=1;entryX=0.5;entryY=0;" target="payment" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="gateway-fraud" edge="1" parent="1" source="gateway" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#000000;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0.2;entryY=0;" target="fraud" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="250" />
+              <mxPoint x="864" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gateway-reconciliation" edge="1" parent="1" source="gateway" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#000000;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0.35;exitY=1;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="reconciliation" value="">
+          <mxGeometry relative="1" x="-0.0384" as="geometry">
+            <Array as="points">
+              <mxPoint x="577" y="640" />
+              <mxPoint x="697.5" y="640" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="payment-stripe" edge="1" parent="1" source="payment" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#000000;fontSize=12;labelBackgroundColor=#FFFFFF;edgeStyle=none;exitX=0;exitY=0.7;entryX=1;entryY=0.3;" target="stripe" value="Webhooks">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="payment-fraud" edge="1" parent="1" source="payment" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#000000;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0.991;exitY=0.689;entryX=0.682;entryY=0.011;entryDx=0;entryDy=0;entryPerimeter=0;exitDx=0;exitDy=0;exitPerimeter=0;" target="fraud" value="REST: Score Transaction">
+          <mxGeometry relative="1" x="0.3389" y="-10" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="820" y="352" />
+              <mxPoint x="820" y="350" />
+              <mxPoint x="970" y="350" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="payment-kafka" edge="1" parent="1" source="payment" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#000000;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0;entryY=0.3;" target="kafka" value="payment.created&lt;br&gt;payment.completed&lt;br&gt;payment.failed">
+          <mxGeometry relative="1" x="-0.4921" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fraud-kafka" edge="1" parent="1" source="fraud" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#000000;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0.2;exitY=1;" target="kafka" value="fraud.scored&lt;br&gt;fraud.alert.high">
+          <mxGeometry relative="1" x="-0.6835" y="-4" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="864" y="620" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="redis-fraud" edge="1" parent="1" source="kafka" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#000000;fontSize=12;labelBackgroundColor=#FFFFFF;entryX=0.75;entryY=1;entryDx=0;entryDy=0;" target="fraud" value="">
+          <mxGeometry relative="1" x="-0.8552" as="geometry">
+            <Array as="points">
+              <mxPoint x="1190" y="600" />
+              <mxPoint x="985" y="600" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kafka-reconciliation" edge="1" parent="1" source="kafka" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#000000;fontSize=12;labelBackgroundColor=#FFFFFF;entryX=0.85;entryY=0;" target="reconciliation" value="">
+          <mxGeometry relative="1" x="0.1501" as="geometry">
+            <Array as="points">
+              <mxPoint x="1210" y="770" />
+              <mxPoint x="835.5" y="770" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="reconciliation-kafka" edge="1" parent="1" source="reconciliation" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#000000;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0.83;entryY=1.02;entryDx=0;entryDy=0;entryPerimeter=0;" target="kafka" value="reconciliation.completed">
+          <mxGeometry relative="1" x="-0.6923" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JTPxQIag51cQTHmkg5QD-2" edge="1" parent="1" source="gateway" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.229;exitY=0.99;exitDx=0;exitDy=0;curved=0;exitPerimeter=0;" target="notification">
+          <mxGeometry relative="1" x="0.1559" as="geometry">
+            <Array as="points" />
+            <mxPoint x="550" y="650" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JTPxQIag51cQTHmkg5QD-5" parent="1" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://icons.diagrams.net/assets/apps-and-system-logos/1/Kafka.svg" value="" vertex="1">
+          <mxGeometry height="67" width="42" x="1270" y="625" as="geometry" />
+        </mxCell>
+        <mxCell id="JTPxQIag51cQTHmkg5QD-7" parent="1" style="image;sketch=0;aspect=fixed;html=1;align=center;fontSize=12;image=img/lib/mscae/Cache_Redis_Product.svg;points=[[0.5,0,0],[0.5,1,0],[0,0.503,0],[1,0.501,0],[0.987,0.218,0],[0.987,0.785,0],[0.013,0.785,0],[0.013,0.218,0]];" value="" vertex="1">
+          <mxGeometry height="42" width="50" x="1480" y="620" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
