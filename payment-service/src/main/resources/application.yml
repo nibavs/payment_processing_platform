@@ -28,6 +28,13 @@ spring:
 #      properties:
 #        spring.json.add.type.headers: false
 
+
+yookassa:
+  shop-id: ${YOOKASSA_SHOP_ID:shop_id}
+  secret-key: ${YOOKASSA_TOKEN:token}
+  api-url: https://api.yookassa.ru/v3
+  return-url: ${YOOKASSA_RETURN_URL:return_url}
+
 management:
   endpoints:
     web:

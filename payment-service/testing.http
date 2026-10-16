@@ -1,11 +1,18 @@
 POST http://localhost:8082/api/v1/payments/charge
 Content-Type: application/json
-X-User-Id: 453bdfab-7e0a-4ce7-b54b-ae157a9d085e
+X-User-Id: 525d547e-154e-416f-8af1-bd3194a7e348
 
 {
-  "amount": 500,
+  "amount": 300,
   "customerEmail": "nibavs@mail.ru"
 }
 
 ###
 
+POST https://complacently-fluttering-kakapo.cloudpub.ru/api/v1/webhooks/yooKassa
+Content-Type: application/json
+
+{
+  "amount": 500,
+  "customerEmail": "nibavs@mail.ru"
+}

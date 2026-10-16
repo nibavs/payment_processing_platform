@@ -41,12 +41,12 @@ spring:
               filters:
                 - StripPrefix=0
 
-#            - id: stripe-webhooks
-#              uri: http://localhost:8082
-#              predicates:
-#                - Path=/api/v1/webhooks/**
-#              filters:
-#                - StripPrefix=0
+            - id: stripe-webhooks
+              uri: http://localhost:8082
+              predicates:
+                - Path=/api/v1/webhooks/**
+              filters:
+                - StripPrefix=0
   data:
     redis:
       host: localhost
