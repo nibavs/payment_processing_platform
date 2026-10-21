@@ -1,10 +1,11 @@
 POST http://localhost:8082/api/v1/payments/charge
 Content-Type: application/json
-X-User-Id: 525d547e-154e-416f-8af1-bd3194a7e348
+X-User-Id: 1f8edbdc-653d-4675-83e2-7bc8610611a6
 
 {
   "amount": 300,
-  "customerEmail": "nibavs@mail.ru"
+  "customerEmail": "nibavs@mail.ru",
+  "currency": "USD"
 }
 
 ###

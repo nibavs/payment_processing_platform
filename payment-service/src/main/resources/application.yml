@@ -35,6 +35,10 @@ yookassa:
   api-url: https://api.yookassa.ru/v3
   return-url: ${YOOKASSA_RETURN_URL:return_url}
 
+services:
+  fraud:
+    url: ${FRAUD_SERVICE_URL:http://localhost:8083}
+
 management:
   endpoints:
     web:
