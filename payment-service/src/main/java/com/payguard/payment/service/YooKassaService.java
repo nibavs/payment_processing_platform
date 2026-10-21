@@ -20,7 +20,7 @@ public class YooKassaService {
     public String chargeViaYooKassa(ChargeRequest chargeRequest) {
 
         CreatePaymentRequest request = new CreatePaymentRequest()
-                .setAmount(MonetaryAmount.of(new BigDecimal(chargeRequest.amount()), MonetaryAmount.CURRENCY_RUB))
+                .setAmount(MonetaryAmount.of(chargeRequest.amount(), MonetaryAmount.CURRENCY_RUB))
                 .setDescription(chargeRequest.customerEmail())
                 .setCapture(false)
                 .setConfirmation(new ConfirmationDataRedirect()
