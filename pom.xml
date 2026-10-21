@@ -17,7 +17,8 @@
         <module>payment-service</module>
         <module>api-gateway</module>
         <module>notification-service</module>
-        <module>kafka-events</module>
+        <module>shared</module>
+        <module>fraud-service</module>
     </modules>
 
     <!-- ===== SPRING BOOT PARENT ===== -->
@@ -108,6 +109,11 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-openfeign-core</artifactId>-->
+<!--        </dependency>-->
 
         <!-- For health checks -->
         <dependency>

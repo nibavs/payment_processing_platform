@@ -81,7 +81,7 @@
         <!-- Shared Kafka events module -->
         <dependency>
             <groupId>com.nibavs</groupId>
-            <artifactId>kafka-events</artifactId>
+            <artifactId>shared</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 

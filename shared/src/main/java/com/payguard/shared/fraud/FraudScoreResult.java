@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.NonNull;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Builder
@@ -17,6 +16,6 @@ public record FraudScoreResult(
         String modelVersion,
         int latencyMs,
         boolean fallbackUsed,
-        Map<String, Object>features
+        TransactionFeatures features
 ) {
 }
