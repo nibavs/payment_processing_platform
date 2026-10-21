@@ -2,16 +2,21 @@ package com.payguard.notification.consumer;
 
 
 import com.payguard.kafka_events.user.UserRegisteredEvent;
+import com.payguard.notification.service.NotificationProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class UserEventConsumer {
+
+    private final NotificationProcessor notificationProcessor;
 
     @KafkaListener(topics = {"user.registered"}, groupId = "notification-service")
     public void handleUserRegistered(UserRegisteredEvent event) {
@@ -21,7 +26,7 @@ public class UserEventConsumer {
             UserRegisteredEvent.UserRegisteredData data = event.data();
             if (data == null) return;
 
-            String userId = data.userId().toString();
+            UUID userId = data.userId();
             String email = data.email();
             String merchantName = data.merchantName();
 
@@ -37,15 +42,10 @@ public class UserEventConsumer {
                     merchantName
             );
 
-            log.info("Message consumed:\nuserId - {},\nemail - {}\nmerchantName - {}\nsubject - {}\nbody - {}",
-                    userId,
-                    email,
-                    merchantName,
-                    subject,
-                    body
+            notificationProcessor.processNotification(
+                    userId, email,
+                    "WELCOME", subject, body
             );
-
-            // TODO: process notification
         } catch (Exception e) {
             log.error("Failed to process user.registered: {}", e.getMessage(), e);
         }

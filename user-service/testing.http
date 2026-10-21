@@ -2,11 +2,11 @@ POST http://localhost:8081/api/v1/auth/register
 Content-Type: application/json
 
 {
-  "email": "nibavs@mail.ru",
+  "email": "niba@mail.ru",
   "password": "pass1234",
-  "merchantName": "Nibavs",
+  "merchantName": "Nibavss",
   "merchantCategory": "Clothes",
-  "country": "KAz"
+  "country": "RUS"
 }
 
 ###

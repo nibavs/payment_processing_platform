@@ -53,22 +53,22 @@ services:
 #      timeout: 5s
 #      retries: 5
 #
-#  postgres-notifications:
-#    image: postgres:15-alpine
-#    container_name: payguard-postgres-notifications
-#    environment:
-#      POSTGRES_DB: payguard_notifications
-#      POSTGRES_USER: payguard
-#      POSTGRES_PASSWORD: payguard_secret
-#    ports:
-#      - "5436:5432"
-#    volumes:
-#      - postgres_notifications_data:/var/lib/postgresql/data
-#    healthcheck:
-#      test: ["CMD-SHELL", "pg_isready -U payguard -d payguard_notifications"]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 5
+  postgres-notifications:
+    image: postgres:15-alpine
+    container_name: payguard-postgres-notifications
+    environment:
+      POSTGRES_DB: payguard_notifications
+      POSTGRES_USER: payguard
+      POSTGRES_PASSWORD: payguard_secret
+    ports:
+      - "5436:5432"
+    volumes:
+      - postgres_notifications_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U payguard -d payguard_notifications"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 #
 #  postgres-reconciliation:
 #    image: postgres:15-alpine
@@ -139,21 +139,21 @@ services:
       DYNAMIC_CONFIG_ENABLED: "true"
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:19092
-#
-#  # ==================== EMAIL ====================
-#
-#  mailhog:
-#    image: mailhog/mailhog:latest
-#    container_name: payguard-mailhog
-#    ports:
-#      - "1025:1025"
-#      - "8025:8025"
+
+  # ==================== EMAIL ====================
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: payguard-mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
 
 volumes:
   postgres_users_data:
   postgres_payments_data:
 #  postgres_fraud_data:
-#  postgres_notifications_data:
+  postgres_notifications_data:
 #  postgres_reconciliation_data:
   redis_data:
   kafka_data:
