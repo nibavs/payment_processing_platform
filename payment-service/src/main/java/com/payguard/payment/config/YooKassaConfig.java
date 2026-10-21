@@ -8,7 +8,7 @@ import ru.deelter.yookassa.YooKassa;
 
 @Configuration
 @RequiredArgsConstructor
-class YooKassaConfiguration {
+class YooKassaConfig {
     private final YooKassaProperties yooKassaProperties;
 
     @Bean

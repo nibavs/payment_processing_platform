@@ -1,4 +1,4 @@
-package com.payguard.kafka_events;
+package com.payguard.kafka_events.user;
 
 import lombok.Builder;
 

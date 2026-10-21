@@ -1,4 +1,4 @@
-package com.payguard.payment.enums;
+package com.payguard.shared.payment;
 
 public enum TransactionStatus {
     PENDING,

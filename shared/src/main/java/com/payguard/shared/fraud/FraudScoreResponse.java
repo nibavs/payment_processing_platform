@@ -3,16 +3,15 @@ package com.payguard.shared.fraud;
 import lombok.Builder;
 import lombok.NonNull;
 
-import java.util.List;
 import java.util.UUID;
 
 @Builder
-public record FraudScoreResult(
+public record FraudScoreResponse(
         UUID transactionId,
         double fraudScore,
         @NonNull
         FraudDecision decision,
-        List<String>contributingFactors,
+        String contributingFactor,
         String modelVersion,
         int latencyMs,
         boolean fallbackUsed,

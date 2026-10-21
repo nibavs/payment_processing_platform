@@ -1,7 +1,7 @@
 package com.payguard.payment.entity;
 
-import com.payguard.payment.enums.TransactionStatus;
 import com.payguard.shared.fraud.FraudDecision;
+import com.payguard.shared.payment.TransactionStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

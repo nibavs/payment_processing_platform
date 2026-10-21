@@ -1,7 +1,7 @@
 package com.payguard.notification.consumer;
 
 
-import com.payguard.kafka_events.UserRegisteredEvent;
+import com.payguard.kafka_events.user.UserRegisteredEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
