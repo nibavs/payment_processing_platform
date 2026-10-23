@@ -1,5 +1,6 @@
 package com.payguard.user.service;
 
+import com.payguard.shared.notification.NotificationChannel;
 import com.payguard.user.dto.AuthResponse;
 import com.payguard.user.dto.LoginRequest;
 import com.payguard.user.dto.RegisterRequest;
@@ -8,6 +9,7 @@ import com.payguard.user.entity.User;
 import com.payguard.user.enums.Role;
 import com.payguard.user.exception.EmailAlreadyExistsException;
 import com.payguard.user.exception.InvalidCredentialsException;
+import com.payguard.user.exception.PhoneNumberAlreadyExistsException;
 import com.payguard.user.mapper.UserMapper;
 import com.payguard.user.repository.UserRepository;
 import com.payguard.user.security.JwtTokenProvider;
@@ -35,8 +37,17 @@ public class UserService {
             throw new EmailAlreadyExistsException(request.email().trim().toLowerCase());
         }
 
+        if (userRepository.existsByPhoneNumber(request.phoneNumber())) {
+            throw new PhoneNumberAlreadyExistsException(request.phoneNumber());
+        }
+
         User user = User.builder()
                 .email(request.email().trim().toLowerCase())
+                .phoneNumber(request.phoneNumber())
+                .preferableNotificationChannel(request.preferableNotificationChannel() == null
+                        ? NotificationChannel.EMAIL
+                        : request.preferableNotificationChannel()
+                )
                 .passwordHash(passwordEncoder.encode(request.password()))
                 .merchantName(request.merchantName().trim())
                 .merchantCategory(request.merchantCategory().trim().toLowerCase())

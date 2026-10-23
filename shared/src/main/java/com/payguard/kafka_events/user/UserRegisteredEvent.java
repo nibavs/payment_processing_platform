@@ -1,5 +1,6 @@
 package com.payguard.kafka_events.user;
 
+import com.payguard.shared.notification.NotificationChannel;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
@@ -18,6 +19,8 @@ public record UserRegisteredEvent(
     public record UserRegisteredData(
             UUID userId,
             String email,
+            String phoneNumber,
+            NotificationChannel preferableNotificationChannel,
             String merchantName,
             String merchantCategory,
             String country

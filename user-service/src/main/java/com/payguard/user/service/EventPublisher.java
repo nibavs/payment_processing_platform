@@ -39,6 +39,8 @@ public class EventPublisher {
                 .data(UserRegisteredEvent.UserRegisteredData.builder()
                         .userId(user.getId())
                         .email(user.getEmail())
+                        .phoneNumber(user.getPhoneNumber())
+                        .preferableNotificationChannel(user.getPreferableNotificationChannel())
                         .merchantName(user.getMerchantName())
                         .merchantCategory(user.getMerchantCategory())
                         .country(user.getCountry())

@@ -1,5 +1,6 @@
 package com.payguard.user.dto;
 
+import com.payguard.shared.notification.NotificationChannel;
 import com.payguard.user.enums.Role;
 import lombok.Builder;
 
@@ -10,6 +11,8 @@ import java.util.UUID;
 public record UserResponse (
         UUID id,
         String email,
+        String phoneNumber,
+        NotificationChannel preferableNotificationChannel,
         String merchantName,
         String merchantCategory,
         String country,

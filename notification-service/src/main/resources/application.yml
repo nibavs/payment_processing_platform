@@ -13,7 +13,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     show-sql: false
     properties:
       hibernate:
@@ -39,6 +39,10 @@ spring:
           auth: false
           starttls:
             enable: false
+
+sms:
+  login: ${SMSC_LOGIN:login}
+  password: ${SMSC_PASSWORD:password}
 
 notification:
   from-email: noreply@payguard.com

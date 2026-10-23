@@ -1,7 +1,9 @@
 package com.payguard.notification.service;
 
+import com.payguard.kafka_events.user.UserRegisteredEvent;
 import com.payguard.notification.entity.Notification;
 import com.payguard.notification.repository.NotificationRepository;
+import com.payguard.shared.notification.NotificationChannel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,29 +18,35 @@ import java.util.UUID;
 public class NotificationProcessor {
 
     private final EmailService emailService;
+    private final SMSService smsService;
 
     @Value("${notification.retry.max-attempts}")
     private int maxAttempts;
     private final NotificationRepository notificationRepository;
 
-    public void processNotification(UUID userId, String recipientEmail,
+    public void processNotification(UserRegisteredEvent.UserRegisteredData data,
                                     String type, String subject,
-                                    String emailBody) {
+                                    String body) {
+
         Notification notification = Notification.builder()
-                .userId(userId)
+                .userId(data.userId())
                 .type(type)
-                .channel("EMAIL")
+                .channel(data.preferableNotificationChannel())
                 .status("PENDING")
-                .recipient(recipientEmail)
+                .recipient(data.email())
                 .subject(subject)
                 .attempts(0)
                 .build();
 
         notification = notificationRepository.save(notification);
-        sendWithRetry(notification, emailBody);
+
+        switch (data.preferableNotificationChannel()) {
+            case EMAIL -> sendEmailWithRetry(notification, body);
+            case SMS -> smsService.sendSMS(data.phoneNumber(), body);
+        }
     }
 
-    private void sendWithRetry(Notification notification, String emailBody) {
+    private void sendEmailWithRetry(Notification notification, String emailBody) {
         for (int attempt = 1; attempt <= maxAttempts; attempt++) {
             try {
                 notification.setAttempts(attempt);

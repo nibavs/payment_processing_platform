@@ -26,8 +26,6 @@ public class UserEventConsumer {
             UserRegisteredEvent.UserRegisteredData data = event.data();
             if (data == null) return;
 
-            UUID userId = data.userId();
-            String email = data.email();
             String merchantName = data.merchantName();
 
             String subject = "Welcome to PayGuard!";
@@ -42,8 +40,7 @@ public class UserEventConsumer {
                     merchantName
             );
 
-            notificationProcessor.processNotification(
-                    userId, email,
+            notificationProcessor.processNotification(data,
                     "WELCOME", subject, body
             );
         } catch (Exception e) {

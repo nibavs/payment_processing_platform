@@ -1,6 +1,7 @@
 package com.payguard.notification.entity;
 
 
+import com.payguard.shared.notification.NotificationChannel;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -27,7 +28,7 @@ public class Notification {
     private String type;
 
     @Column(nullable = false, length = 20)
-    private String channel;
+    private NotificationChannel channel;
 
     @Column(nullable = false, length = 20)
     private String status;

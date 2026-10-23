@@ -1,5 +1,6 @@
 package com.payguard.user.entity;
 
+import com.payguard.shared.notification.NotificationChannel;
 import com.payguard.user.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,6 +26,13 @@ public class User {
     @Column(nullable = false, unique = true, length = 255)
     private String email;
 
+    @Column(name = "phone_number", nullable = false, unique = true, length = 255)
+    private String phoneNumber;
+
+    @Column(name = "preferable_notification_channel", nullable = false, length = 20)
+    @Enumerated(EnumType.STRING)
+    private NotificationChannel preferableNotificationChannel;
+
     @Column(name = "password_hash", nullable = false, length = 255)
     private String passwordHash;
 
@@ -37,8 +45,8 @@ public class User {
     @Column(nullable = false, length = 3)
     private String country;
 
-    @Column(name = "stripe_customer_id", unique = true, length = 255)
-    private String stripeCustomerId;
+    @Column(name = "yooKassa_customer_id", unique = true, length = 255)
+    private String yooKassaCustomerId;
 
     @Column(nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
