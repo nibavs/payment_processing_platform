@@ -40,6 +40,7 @@
         <mapstruct.version>1.6.3</mapstruct.version>
         <jjwt.version>0.13.0</jjwt.version>
         <jackson.datatype.version>2.22.3</jackson.datatype.version>
+        <minio.version>9.0.3</minio.version>
     </properties>
 
     <!-- ===== For controlling versions ===== -->
@@ -101,6 +102,13 @@
                 <version>${jackson.datatype.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
+            </dependency>
+
+
         </dependencies>
     </dependencyManagement>
 
@@ -110,10 +118,10 @@
             <artifactId>lombok</artifactId>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-openfeign-core</artifactId>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.cloud</groupId>-->
+        <!--            <artifactId>spring-cloud-openfeign-core</artifactId>-->
+        <!--        </dependency>-->
 
         <!-- For health checks -->
         <dependency>
@@ -148,7 +156,6 @@
             </plugins>
         </pluginManagement>
     </build>
-
 
 
 </project>

@@ -1,4 +1,8 @@
 POST http://localhost:8081/api/v1/auth/register
+Content-Type: multipart/form-data; boundary=MyBoundary
+
+--MyBoundary
+Content-Disposition: form-data; name="data"
 Content-Type: application/json
 
 {
@@ -8,8 +12,15 @@ Content-Type: application/json
   "merchantCategory": "Clothes",
   "country": "RUS",
   "phoneNumber": "+79998887764",
-  "preferableNotificationChannel": "SMS"
+  "preferableNotificationChannel": "EMAIL"
 }
+
+--MyBoundary
+Content-Disposition: form-data; name="photo"; filename="avatar.jpeg"
+Content-Type: image/jpeg
+
+< ./avatar.jpeg
+--MyBoundary--
 
 ###
 POST http://localhost:8081/api/v1/auth/login

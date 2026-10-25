@@ -13,6 +13,7 @@ public record UserResponse (
         String email,
         String phoneNumber,
         NotificationChannel preferableNotificationChannel,
+        String avatarUrl,
         String merchantName,
         String merchantCategory,
         String country,

@@ -4,7 +4,6 @@ import com.payguard.shared.notification.NotificationChannel;
 import com.payguard.user.dto.AuthResponse;
 import com.payguard.user.dto.LoginRequest;
 import com.payguard.user.dto.RegisterRequest;
-import com.payguard.user.dto.UserResponse;
 import com.payguard.user.entity.User;
 import com.payguard.user.enums.Role;
 import com.payguard.user.exception.EmailAlreadyExistsException;
@@ -19,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -30,9 +30,10 @@ public class UserService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserMapper userMapper;
     private final EventPublisher eventPublisher;
+    private final S3StorageService s3StorageService;
 
     @Transactional
-    public AuthResponse register(@Valid RegisterRequest request) {
+    public AuthResponse register(@Valid RegisterRequest request, MultipartFile photo) {
         if (userRepository.existsByEmail(request.email())) {
             throw new EmailAlreadyExistsException(request.email().trim().toLowerCase());
         }
@@ -40,6 +41,7 @@ public class UserService {
         if (userRepository.existsByPhoneNumber(request.phoneNumber())) {
             throw new PhoneNumberAlreadyExistsException(request.phoneNumber());
         }
+        String avatarKey = photo == null ? null : s3StorageService.upload(photo);
 
         User user = User.builder()
                 .email(request.email().trim().toLowerCase())
@@ -53,6 +55,7 @@ public class UserService {
                 .merchantCategory(request.merchantCategory().trim().toLowerCase())
                 .country(request.country().trim().toUpperCase())
                 .role(Role.MERCHANT)
+                .avatarKey(avatarKey)
                 .build();
 
         User savedUser = userRepository.save(user);
@@ -62,11 +65,13 @@ public class UserService {
 
         String generatedToken = jwtTokenProvider.generateToken(savedUser);
 
+        String avatarUrl = s3StorageService.getPhotoUrl(avatarKey);
+
         return AuthResponse.builder()
                 .token(generatedToken)
                 .tokenType("Bearer")
                 .expiresIn(jwtTokenProvider.getExpirationMs())
-                .userResponse(userMapper.toResponse(savedUser))
+                .userResponse(userMapper.toResponse(savedUser, avatarUrl))
                 .build();
     }
 
@@ -82,11 +87,13 @@ public class UserService {
 
         String generatedToken = jwtTokenProvider.generateToken(user);
 
+        String avatarUrl = s3StorageService.getPhotoUrl(user.getAvatarKey());
+
         return AuthResponse.builder()
                 .token(generatedToken)
                 .tokenType("Bearer")
                 .expiresIn(jwtTokenProvider.getExpirationMs())
-                .userResponse(userMapper.toResponse(user))
+                .userResponse(userMapper.toResponse(user, avatarUrl))
                 .build();
     }
 }

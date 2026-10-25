@@ -29,6 +29,9 @@ public class User {
     @Column(name = "phone_number", nullable = false, unique = true, length = 255)
     private String phoneNumber;
 
+    @Column(name = "avatar_key")
+    private String avatarKey;
+
     @Column(name = "preferable_notification_channel", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     private NotificationChannel preferableNotificationChannel;
