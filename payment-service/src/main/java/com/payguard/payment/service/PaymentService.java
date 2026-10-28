@@ -5,6 +5,7 @@ import com.payguard.payment.dto.ChargeRequest;
 import com.payguard.payment.dto.TransactionResponse;
 import com.payguard.payment.entity.Transaction;
 import com.payguard.payment.exception.PaymentBlockedException;
+import com.payguard.payment.mapper.TransactionMapper;
 import com.payguard.payment.repository.TransactionRepository;
 import com.payguard.shared.fraud.FraudScoreRequest;
 import com.payguard.shared.fraud.FraudScoreResponse;
@@ -25,6 +26,7 @@ public class PaymentService {
     private final TransactionRepository transactionRepository;
     private final FraudClient fraudClient;
     private final PaymentEventPublisher paymentEventPublisher;
+    private final TransactionMapper transactionMapper;
 
     @Transactional
     public TransactionResponse processPayment(UUID merchantId, @Valid ChargeRequest request) {
@@ -48,6 +50,9 @@ public class PaymentService {
                 .currency(savedTransaction.getCurrency())
                 .customerEmail(savedTransaction.getCustomerEmail())
                 .amount(savedTransaction.getAmount())
+                .merchantCategory("merchantCategory")
+                .country("Russia")
+                .timestamp(System.currentTimeMillis() / 1000)
                 .build());
 
         savedTransaction.setFraudDecision(fraudScoreResponse.decision());
@@ -77,11 +82,6 @@ public class PaymentService {
         }
 
 
-        return TransactionResponse.builder()
-                .amount(request.amount())
-                .customerEmail(request.customerEmail())
-                .fraudDecision(fraudScoreResponse.decision())
-                .paymentUrl(paymentUrl)
-                .build();
+        return transactionMapper.toResponse(savedTransaction, paymentUrl);
     }
 }

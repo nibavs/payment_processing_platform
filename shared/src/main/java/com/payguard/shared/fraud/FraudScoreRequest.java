@@ -11,6 +11,9 @@ public record FraudScoreRequest(
         UUID merchantId,
         String currency,
         String customerEmail,
-        BigDecimal amount
+        BigDecimal amount,
+        String country,
+        Long timestamp,
+        String merchantCategory
 ) {
 }

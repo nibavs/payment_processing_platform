@@ -5,7 +5,7 @@ import lombok.NonNull;
 
 import java.util.UUID;
 
-@Builder
+@Builder(toBuilder = true)
 public record FraudScoreResponse(
         UUID transactionId,
         double fraudScore,
