@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 public record ChargeRequest(
-        @Min(value = 50, message = "Minimum amount is 50 cents ($0.50)")
+        @Min(value = 50, message = "Minimum amount is 50")
         BigDecimal amount,
 
         @NotBlank(message = "Currency is required")

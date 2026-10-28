@@ -1,12 +1,17 @@
 package com.payguard.shared.fraud;
 
+import lombok.Builder;
+
+import java.math.BigDecimal;
+
+@Builder
 public record TransactionFeatures(
-        long amountCents,
+        BigDecimal amountCents,
         int hourOfDay,
         int dayOfWeek,
         String merchantCategory,
         long userAvgAmountCents,
-        double amountDeviation,
+        BigDecimal amountDeviation,
         int txVelocity1h,
         int txVelocity24h,
         boolean newMerchant,

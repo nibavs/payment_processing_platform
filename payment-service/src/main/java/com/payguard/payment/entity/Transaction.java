@@ -46,6 +46,7 @@ public class Transaction {
     private Double fraudScore;
 
     @Column(name = "fraud_decision", length = 20)
+    @Enumerated(EnumType.STRING)
     private FraudDecision fraudDecision;
 
     @Column(name = "customer_email", nullable = false)
