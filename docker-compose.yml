@@ -36,23 +36,23 @@ services:
       timeout: 5s
       retries: 5
 
-#  postgres-fraud:
-#    image: postgres:15-alpine
-#    container_name: payguard-postgres-fraud
-#    environment:
-#      POSTGRES_DB: payguard_fraud
-#      POSTGRES_USER: payguard
-#      POSTGRES_PASSWORD: payguard_secret
-#    ports:
-#      - "5435:5432"
-#    volumes:
-#      - postgres_fraud_data:/var/lib/postgresql/data
-#    healthcheck:
-#      test: ["CMD-SHELL", "pg_isready -U payguard -d payguard_fraud"]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 5
-#
+  postgres-fraud:
+    image: postgres:15-alpine
+    container_name: payguard-postgres-fraud
+    environment:
+      POSTGRES_DB: payguard_fraud
+      POSTGRES_USER: payguard
+      POSTGRES_PASSWORD: payguard_secret
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_fraud_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U payguard -d payguard_fraud"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   postgres-notifications:
     image: postgres:15-alpine
     container_name: payguard-postgres-notifications
@@ -69,24 +69,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-#
-#  postgres-reconciliation:
-#    image: postgres:15-alpine
-#    container_name: payguard-postgres-reconciliation
-#    environment:
-#      POSTGRES_DB: payguard_reconciliation
-#      POSTGRES_USER: payguard
-#      POSTGRES_PASSWORD: payguard_secret
-#    ports:
-#      - "5437:5432"
-#    volumes:
-#      - postgres_reconciliation_data:/var/lib/postgresql/data
-#    healthcheck:
-#      test: ["CMD-SHELL", "pg_isready -U payguard -d payguard_reconciliation"]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 5
-#
+
   # ==================== REDIS ====================
 
   redis:
@@ -171,9 +154,8 @@ services:
 volumes:
   postgres_users_data:
   postgres_payments_data:
-#  postgres_fraud_data:
+  postgres_fraud_data:
   postgres_notifications_data:
-#  postgres_reconciliation_data:
   minio-data:
   redis_data:
   kafka_data:
