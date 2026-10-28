@@ -1,6 +1,6 @@
 package com.payguard.fraud.controller;
 
-import com.payguard.shared.fraud.FraudDecision;
+import com.payguard.fraud.service.FraudScoringOrchestrator;
 import com.payguard.shared.fraud.FraudScoreRequest;
 import com.payguard.shared.fraud.FraudScoreResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,14 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 class FraudController {
 
 
+    private final FraudScoringOrchestrator fraudScoringOrchestrator;
+
     @PostMapping("/score")
     public ResponseEntity<FraudScoreResponse> scoreTransaction(@RequestBody FraudScoreRequest request) {
         log.info("Fraud score request {}", request);
-        FraudScoreResponse result = FraudScoreResponse.builder()
-                .fraudScore(0.3)
-                .transactionId(request.transactionId())
-                .decision(FraudDecision.APPROVE)
-                .build();
+
+        FraudScoreResponse result = fraudScoringOrchestrator.scoreTransaction(request);
         return ResponseEntity.ok(result);
     }
 }
