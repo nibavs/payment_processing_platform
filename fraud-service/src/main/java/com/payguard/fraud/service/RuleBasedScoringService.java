@@ -35,7 +35,7 @@ public class RuleBasedScoringService {
 
         // Rule 1: Amount deviation from average
         if (features.userAvgAmountCents() > 0) {
-            double deviation = features.amountCents().divide(BigDecimal.valueOf(features.userAvgAmountCents())).doubleValue();
+            double deviation = features.amount().divide(BigDecimal.valueOf(features.userAvgAmountCents())).doubleValue();
             if (deviation > 5.0) {
                 score += 0.25;
                 factors.add("extreme_amount_deviation");

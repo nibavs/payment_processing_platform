@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 @Builder
 public record TransactionFeatures(
-        BigDecimal amountCents,
+        BigDecimal amount,
         int hourOfDay,
         int dayOfWeek,
         String merchantCategory,

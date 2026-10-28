@@ -1,21 +1,22 @@
 package com.payguard.fraud.service;
 
+import com.payguard.fraud.config.KafkaConfig;
 import com.payguard.fraud.entity.FraudAuditLog;
 import com.payguard.fraud.repository.AuditLogRepository;
+import com.payguard.kafka_events.fraud.FraudAlertHighEvent;
+import com.payguard.kafka_events.fraud.FraudScoredEvent;
 import com.payguard.shared.fraud.FraudDecision;
 import com.payguard.shared.fraud.FraudScoreRequest;
 import com.payguard.shared.fraud.FraudScoreResponse;
 import com.payguard.shared.fraud.TransactionFeatures;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,6 +29,7 @@ public class FraudScoringOrchestrator {
     private final ScoreCachingService scoreCachingService;
     private final VelocityTrackingService velocityTrackingService;
     private final AuditLogRepository auditLogRepository;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     /**
      * Score a transaction end-to-end:
@@ -43,10 +45,8 @@ public class FraudScoringOrchestrator {
         String transactionId = transaction.transactionId().toString();
         String merchantId = transaction.merchantId().toString();
         BigDecimal amountCents = transaction.amount();
-        String currency = transaction.currency();
         String customerEmail = transaction.customerEmail();
         String merchantCategory = transaction.merchantCategory();
-        String country = transaction.country();
         long timestamp = transaction.timestamp();
 
         long startTime = System.currentTimeMillis();
@@ -79,7 +79,7 @@ public class FraudScoringOrchestrator {
 
         // Step 3: Assemble features
         TransactionFeatures features = TransactionFeatures.builder()
-                .amountCents(amountCents)
+                .amount(amountCents)
                 .hourOfDay(hourOfDay)
                 .dayOfWeek(dayOfWeek)
                 .merchantCategory(merchantCategory != null ? merchantCategory : "unknown")
@@ -112,13 +112,55 @@ public class FraudScoringOrchestrator {
         // Step 7: Save audit log
         saveAuditLog(transactionId, merchantId, result);
 
-//        // Step 8: Publish Kafka events
-//        publishEvents();
+        // Step 8: Publish Kafka events
+        publishEvents(transactionId, merchantId, result);
 
         log.info("Scored transaction {} → {} (score={}, latency={}ms)",
                 transactionId, result.decision(), result.fraudScore(), totalLatency);
 
         return result;
+    }
+
+    private void publishEvents(String transactionId, String merchantId, FraudScoreResponse result) {
+        try {
+            FraudScoredEvent fraudScoredEvent = FraudScoredEvent.builder()
+                    .eventId("evt_" + UUID.randomUUID().toString().substring(0, 8))
+                    .eventType(KafkaConfig.FRAUD_SCORED_TOPIC)
+                    .timestamp(LocalDateTime.now())
+                    .source("fraud-service")
+                    .data(FraudScoredEvent.FraudScoredData.builder()
+                            .merchantId(merchantId)
+                            .fraudScore(result.fraudScore())
+                            .fraudDecision(result.decision())
+                            .modelVersion(result.modelVersion())
+                            .latencyMs(result.latencyMs())
+                            .fallbackUsed(result.fallbackUsed())
+                            .build())
+                    .build();
+
+            kafkaTemplate.send(KafkaConfig.FRAUD_SCORED_TOPIC, transactionId, fraudScoredEvent);
+
+            if (result.decision().equals(FraudDecision.BLOCK)) {
+                FraudAlertHighEvent fraudAlertHighEvent = FraudAlertHighEvent.builder()
+                        .eventId("evt_" + UUID.randomUUID().toString().substring(0, 8))
+                        .eventType(KafkaConfig.FRAUD_SCORED_TOPIC)
+                        .timestamp(LocalDateTime.now())
+                        .source("fraud-service")
+                        .data(FraudAlertHighEvent.FraudAlertHighData.builder()
+                                .transactionId(transactionId)
+                                .merchantId(merchantId)
+                                .fraudScore(result.fraudScore())
+                                .fraudDecision(result.decision())
+                                .amount(result.features().amount())
+                                .contributingFactor(result.contributingFactor())
+                                .build())
+                        .build();
+
+                kafkaTemplate.send(KafkaConfig.FRAUD_ALERT_HIGH_TOPIC, transactionId, fraudAlertHighEvent);
+            }
+        } catch (Exception e) {
+            log.error("Failed to publish fraud event for transaction {}: {}", transactionId, e.getMessage());
+        }
     }
 
     private void saveAuditLog(String transactionId, String merchantId, FraudScoreResponse result) {
