@@ -16,19 +16,17 @@ import java.util.Optional;
 @Slf4j
 public class ScoreCachingService {
 
-    private final RedisTemplate<String, Object> redisTemplate;
-
+    private final RedisTemplate<String, FraudScoreResponse> redisTemplateFraudScore;
     @Value("${fraud.cache.ttl-seconds}")
     private int ttlSeconds;
 
     public Optional<FraudScoreResponse> get(String merchantId, BigDecimal amountCents, String email) {
         String key = buildKey(merchantId, amountCents, email);
         try {
-            Object cached = redisTemplate.opsForValue().get(key);
-            if (cached instanceof FraudScoreResponse result) {
-                log.debug("Cache HIT for key: {}", key);
-                return Optional.of(result);
-            }
+            FraudScoreResponse cached = redisTemplateFraudScore.opsForValue().get(key);
+
+            log.debug("Cache HIT for key: {}", key);
+            return Optional.ofNullable(cached);
         } catch (Exception e) {
             log.warn("Redis cache read failed: {}", e.getMessage());
         }
@@ -38,7 +36,7 @@ public class ScoreCachingService {
     public void put(String merchantId, BigDecimal amountCents, String email, FraudScoreResponse result) {
         String key = buildKey(merchantId, amountCents, email);
         try {
-            redisTemplate.opsForValue().set(key, result, Duration.ofSeconds(ttlSeconds));
+            redisTemplateFraudScore.opsForValue().set(key, result, Duration.ofSeconds(ttlSeconds));
             log.debug("Cached score for key: {}", key);
         } catch (Exception e) {
             log.warn("Redis cache write failed: {}", e.getMessage());

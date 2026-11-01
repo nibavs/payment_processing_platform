@@ -1,14 +1,15 @@
 package com.payguard.fraud.service;
 
+import com.nibavs.payguard.proto.FraudScoreProtoRequest;
+import com.nibavs.payguard.proto.FraudScoreProtoResponse;
+import com.payguard.shared.fraud.FraudDecision;
+import com.payguard.shared.fraud.FraudScoreResponse;
+import com.payguard.shared.fraud.TransactionFeatures;
 import com.payguard.fraud.config.KafkaConfig;
 import com.payguard.fraud.entity.FraudAuditLog;
 import com.payguard.fraud.repository.AuditLogRepository;
 import com.payguard.kafka_events.fraud.FraudAlertHighEvent;
 import com.payguard.kafka_events.fraud.FraudScoredEvent;
-import com.payguard.shared.fraud.FraudDecision;
-import com.payguard.shared.fraud.FraudScoreRequest;
-import com.payguard.shared.fraud.FraudScoreResponse;
-import com.payguard.shared.fraud.TransactionFeatures;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -41,13 +42,13 @@ public class FraudScoringOrchestrator {
      * 6. Save audit log
      * 7. Publish Kafka events
      */
-    public FraudScoreResponse scoreTransaction(FraudScoreRequest transaction) {
-        String transactionId = transaction.transactionId().toString();
-        String merchantId = transaction.merchantId().toString();
-        BigDecimal amountCents = transaction.amount();
-        String customerEmail = transaction.customerEmail();
-        String merchantCategory = transaction.merchantCategory();
-        long timestamp = transaction.timestamp();
+    public FraudScoreProtoResponse scoreTransaction(FraudScoreProtoRequest transaction) {
+        String transactionId = transaction.getTransactionId();
+        String merchantId = transaction.getMerchantId();
+        BigDecimal amountCents = new BigDecimal(transaction.getAmount());
+        String customerEmail = transaction.getCustomerEmail();
+        String merchantCategory = transaction.getMerchantCategory();
+        long timestamp = transaction.getTimestamp();
 
         long startTime = System.currentTimeMillis();
 
@@ -59,7 +60,7 @@ public class FraudScoringOrchestrator {
             cachedResult.toBuilder()
                     .transactionId(UUID.fromString(transactionId))
                     .build();
-            return cachedResult;
+            return cachedResult.toProtoResponse();
         }
 
 //         Step 2: Gather velocity features from Redis
@@ -118,7 +119,7 @@ public class FraudScoringOrchestrator {
         log.info("Scored transaction {} → {} (score={}, latency={}ms)",
                 transactionId, result.decision(), result.fraudScore(), totalLatency);
 
-        return result;
+        return result.toProtoResponse();
     }
 
     private void publishEvents(String transactionId, String merchantId, FraudScoreResponse result) {

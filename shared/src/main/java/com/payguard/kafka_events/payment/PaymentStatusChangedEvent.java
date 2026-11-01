@@ -1,6 +1,6 @@
 package com.payguard.kafka_events.payment;
 
-import com.payguard.shared.fraud.FraudDecision;
+import com.nibavs.payguard.proto.FraudDecision;
 import com.payguard.shared.payment.TransactionStatus;
 import lombok.Builder;
 

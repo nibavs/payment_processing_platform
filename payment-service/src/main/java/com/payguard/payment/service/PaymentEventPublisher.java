@@ -1,9 +1,9 @@
 package com.payguard.payment.service;
 
+import com.nibavs.payguard.proto.FraudDecision;
 import com.payguard.kafka_events.payment.PaymentStatusChangedEvent;
 import com.payguard.payment.config.KafkaConfig;
 import com.payguard.payment.entity.Transaction;
-import com.payguard.shared.fraud.FraudDecision;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;

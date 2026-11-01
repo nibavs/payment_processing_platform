@@ -21,10 +21,9 @@ class FraudController {
     private final FraudScoringOrchestrator fraudScoringOrchestrator;
 
     @PostMapping("/score")
-    public ResponseEntity<FraudScoreResponse> scoreTransaction(@RequestBody FraudScoreRequest request) {
+    public ResponseEntity<String> scoreTransaction(@RequestBody FraudScoreRequest request) {
         log.info("Fraud score request {}", request);
 
-        FraudScoreResponse result = fraudScoringOrchestrator.scoreTransaction(request);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.badRequest().body("Scoring is now grpc implemented");
     }
 }

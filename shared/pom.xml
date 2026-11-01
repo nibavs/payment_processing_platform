@@ -10,4 +10,12 @@
     </parent>
 
     <artifactId>shared</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.nibavs</groupId>
+            <artifactId>payguard-proto</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>

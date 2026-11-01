@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.nibavs.payguard.proto";
+option java_outer_classname = "FraudServiceProto";
+
+service FraudService {
+  rpc ScoreTransaction (FraudScoreProtoRequest) returns (FraudScoreProtoResponse);
+}
+
+message FraudScoreProtoRequest {
+  string transactionId = 1;
+  string merchantId = 2;
+  string currency = 3;
+  string customerEmail = 4;
+  string amount = 5;
+  string country = 6;
+  int64 timestamp = 7;
+  string merchantCategory = 8;
+}
+
+message FraudScoreProtoResponse {
+  string transactionId = 1;
+  double fraudScore = 2;
+  FraudDecision decision = 3;
+  string contributingFactor = 4;
+  string modelVersion = 5;
+  int32 latencyMs = 6;
+  bool fallbackUsed = 7;
+  TransactionFeatures features = 8;
+}
+
+enum FraudDecision {
+  APPROVE = 0;
+  BLOCK = 1;
+  REVIEW = 2;
+}
+
+message TransactionFeatures {
+  string amount = 1;
+  int32 hourOfDay = 2;
+  int32 dayOfWeek = 3;
+  string merchantCategory = 4;
+  int64 userAvgAmountCents = 5;
+  string amountDeviation = 6;
+  int32 txVelocity1h = 7;
+  int32 txVelocity24h = 8;
+  bool newMerchant = 9;
+  bool countryMismatch = 10;
+  int32 failedAttempts24h = 11;
+}

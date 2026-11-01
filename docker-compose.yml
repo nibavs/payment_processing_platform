@@ -85,6 +85,18 @@ services:
       timeout: 5s
       retries: 5
 
+  redisinsight:
+    image: redislabs/redisinsight:latest
+    container_name: payguard-redisinsight
+    ports:
+      - "5541:5540"
+    volumes:
+      - redisinsight_data:/data
+    environment:
+      - RITRUSTEDORIGINS=http://localhost:5541,http://127.0.0.1:5541
+    depends_on:
+      - redis
+
   # ==================== KAFKA ====================
   kafka:
     image: apache/kafka:4.3.2-rc3
@@ -158,4 +170,5 @@ volumes:
   postgres_notifications_data:
   minio-data:
   redis_data:
+  redisinsight_data:
   kafka_data:

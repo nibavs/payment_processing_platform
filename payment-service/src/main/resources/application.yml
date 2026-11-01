@@ -28,6 +28,12 @@ spring:
       properties:
         spring.json.add.type.headers: false
 
+  grpc:
+    client:
+      channel:
+        fraud-server:
+          target: localhost:9093
+
 
 yookassa:
   shop-id: ${YOOKASSA_SHOP_ID:shop_id}

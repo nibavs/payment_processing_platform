@@ -1,61 +1,50 @@
 package com.payguard.payment.client;
 
-import com.payguard.shared.fraud.FraudDecision;
-import com.payguard.shared.fraud.FraudScoreRequest;
-import com.payguard.shared.fraud.FraudScoreResponse;
+import com.nibavs.payguard.proto.FraudDecision;
+import com.nibavs.payguard.proto.FraudScoreProtoRequest;
+import com.nibavs.payguard.proto.FraudScoreProtoResponse;
+import com.nibavs.payguard.proto.FraudServiceGrpc;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClient;
 
 import java.math.BigDecimal;
-import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class FraudClient {
 
+    private final FraudServiceGrpc.FraudServiceBlockingStub fraudCheckStub;
     @Value("${services.fraud.fallback.max-amount-rub}")
     private BigDecimal fallbackMaxAmount;
 
-    private final RestClient restClient;
 
-    public FraudClient(
-            @Qualifier("fraudRestClient") RestClient restClient
-    ) {
-        this.restClient = restClient;
-    }
-
-    // TODO: handle service unavailable
-    public FraudScoreResponse score(FraudScoreRequest request) {
+    public FraudScoreProtoResponse score(FraudScoreProtoRequest request) {
         try {
-            return restClient.post()
-                    .uri("/api/v1/fraud/score")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(request)
-                    .retrieve()
-                    .body(FraudScoreResponse.class);
-
+            return fraudCheckStub
+                    .withDeadlineAfter(2, TimeUnit.SECONDS)
+                    .scoreTransaction(request);
         } catch (Exception e) {
             log.error("Unexpected error calling Fraud Engine for transaction {}: {}. Using fallback.",
-                    request.transactionId(), e.getMessage());
-            return fallbackScore(request.transactionId(), request.amount());
+                    request.getTransactionId(), e.getMessage());
+            return fallbackScore(request.getTransactionId(), new BigDecimal(request.getAmount()));
         }
     }
 
-    private FraudScoreResponse fallbackScore(UUID transactionId, BigDecimal amount) {
+    private FraudScoreProtoResponse fallbackScore(String transactionId, BigDecimal amount) {
         boolean isSmallAmount = amount.compareTo(fallbackMaxAmount) < 1;
 
-        return FraudScoreResponse.builder()
-                .transactionId(transactionId)
-                .fraudScore(isSmallAmount ? 0.1 : 0.8)
-                .decision(isSmallAmount ? FraudDecision.APPROVE : FraudDecision.BLOCK)
-                .contributingFactor(isSmallAmount ? "fallback_small_amount" : "fallback_large_amount")
-                .modelVersion("fallback-v1.0.0")
-                .latencyMs(0)
-                .fallbackUsed(true)
+        return FraudScoreProtoResponse.newBuilder()
+                .setTransactionId(transactionId)
+                .setFraudScore(isSmallAmount ? 0.1 : 0.8)
+                .setDecision(isSmallAmount ? FraudDecision.APPROVE : FraudDecision.BLOCK)
+                .setContributingFactor(isSmallAmount ? "fallback_small_amount" : "fallback_large_amount")
+                .setModelVersion("fallback-v1.0.0")
+                .setLatencyMs(0)
+                .setFallbackUsed(true)
                 .build();
     }
 }

@@ -19,6 +19,7 @@
         <module>notification-service</module>
         <module>shared</module>
         <module>fraud-service</module>
+        <module>payguard-proto</module>
     </modules>
 
     <!-- ===== SPRING BOOT PARENT ===== -->
@@ -41,6 +42,7 @@
         <jjwt.version>0.13.0</jjwt.version>
         <jackson.datatype.version>2.22.3</jackson.datatype.version>
         <minio.version>9.0.3</minio.version>
+        <protobuf.version>4.36.2</protobuf.version>
     </properties>
 
     <!-- ===== For controlling versions ===== -->
@@ -108,6 +110,11 @@
                 <version>${minio.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java-util</artifactId>
+                <version>${protobuf.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
