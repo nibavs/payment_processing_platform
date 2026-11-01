@@ -41,7 +41,7 @@ spring:
 fraud:
   thresholds:
     approve-max: 0.3
-    review-max: 0.59
+    review-max: 0.3
   cache:
     ttl-seconds: 300
   model:

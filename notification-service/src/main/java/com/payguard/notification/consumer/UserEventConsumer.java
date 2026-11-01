@@ -40,7 +40,7 @@ public class UserEventConsumer {
                     merchantName
             );
 
-            notificationProcessor.processNotification(data,
+            notificationProcessor.processNotification(data.userId(), data.preferableNotificationChannel(), data.email(), data.phoneNumber(),
                     "WELCOME", subject, body
             );
         } catch (Exception e) {

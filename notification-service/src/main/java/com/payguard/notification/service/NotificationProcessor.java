@@ -1,6 +1,5 @@
 package com.payguard.notification.service;
 
-import com.payguard.kafka_events.user.UserRegisteredEvent;
 import com.payguard.notification.entity.Notification;
 import com.payguard.notification.repository.NotificationRepository;
 import com.payguard.shared.notification.NotificationChannel;
@@ -24,25 +23,25 @@ public class NotificationProcessor {
     private int maxAttempts;
     private final NotificationRepository notificationRepository;
 
-    public void processNotification(UserRegisteredEvent.UserRegisteredData data,
-                                    String type, String subject,
-                                    String body) {
+    public void processNotification(UUID userId, NotificationChannel channel, String email,
+                                    String phone, String type,
+                                    String subject, String body) {
 
         Notification notification = Notification.builder()
-                .userId(data.userId())
+                .userId(userId)
                 .type(type)
-                .channel(data.preferableNotificationChannel())
+                .channel(channel)
                 .status("PENDING")
-                .recipient(data.email())
+                .recipient(email)
                 .subject(subject)
                 .attempts(0)
                 .build();
 
         notification = notificationRepository.save(notification);
 
-        switch (data.preferableNotificationChannel()) {
+        switch (channel) {
             case EMAIL -> sendEmailWithRetry(notification, body);
-            case SMS -> smsService.sendSMS(data.phoneNumber(), body);
+            case SMS -> smsService.sendSMS(phone, body);
         }
     }
 
@@ -71,8 +70,11 @@ public class NotificationProcessor {
                     log.error("Notification {} permanently failed after {} attempts",
                             notification.getId(), maxAttempts);
                 } else {
-                    try { Thread.sleep(1000L * attempt); }
-                    catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+                    try {
+                        Thread.sleep(1000L * attempt);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
                 }
             }
         }
