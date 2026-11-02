@@ -2,16 +2,12 @@ package com.payguard.payment.service;
 
 import com.nibavs.payguard.proto.FraudScoreProtoRequest;
 import com.nibavs.payguard.proto.FraudScoreProtoResponse;
-import com.nibavs.payguard.proto.FraudServiceGrpc;
 import com.payguard.payment.client.FraudClient;
 import com.payguard.payment.dto.ChargeRequest;
 import com.payguard.payment.dto.TransactionResponse;
 import com.payguard.payment.entity.Transaction;
-import com.payguard.payment.exception.PaymentBlockedException;
 import com.payguard.payment.mapper.TransactionMapper;
 import com.payguard.payment.repository.TransactionRepository;
-import com.payguard.shared.fraud.FraudScoreRequest;
-import com.payguard.shared.fraud.FraudScoreResponse;
 import com.payguard.shared.payment.TransactionStatus;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -77,8 +73,9 @@ public class PaymentService {
                 transactionRepository.save(savedTransaction);
                 log.info("Payment sent to REVIEW: {} (fraud score: {})", savedTransaction.getId(), fraudScoreResponse.getFraudScore());
             }
+            // TODO: get rid of rest request here
             case APPROVE -> {
-                paymentUrl = yooKassaService.chargeViaYooKassa(request);
+                paymentUrl = yooKassaService.chargeViaYooKassa(request, savedTransaction);
                 paymentEventPublisher.publishPaymentCreated(savedTransaction);
             }
         }
