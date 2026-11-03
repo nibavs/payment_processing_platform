@@ -169,12 +169,4 @@ mvn -pl payment-service -am -Plocal-docker package
 docker image inspect payguard/payment-service:latest
 ```
 
-Для первой сборки Docker должен иметь возможность скачать базовый образ `eclipse-temurin:17-jre`. Если Docker Desktop возвращает ошибку авторизации Docker Hub, выполните `docker logout` и войдите заново через `docker login`.
-
-Запуск сервиса вместе с PostgreSQL и Kafka:
-
-```bash
-docker compose up -d postgres-payments kafka payment-service
-```
-
-Внутри сети Compose сервис автоматически использует `postgres-payments:5432` и `kafka:19092`; HTTP API доступен с хоста на `http://localhost:8082`. Адреса Fraud Service уже заданы как `fraud-service:9093` (gRPC) и `http://fraud-service:8083` (HTTP). Они начнут работать после добавления контейнера Fraud Service с именем `fraud-service` в тот же Compose-проект.
+Для первой сборки Docker должен иметь возможность скачать базовый образ `eclipse-temurin:17-jre`.
