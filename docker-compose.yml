@@ -36,6 +36,32 @@ services:
       timeout: 5s
       retries: 5
 
+  payment-service:
+    image: payguard/payment-service:latest
+    container_name: payguard-payment-service
+    env_file:
+      - ./payment-service/.env
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-payments:5432/payguard_payments
+      SPRING_DATASOURCE_USERNAME: payguard
+      SPRING_DATASOURCE_PASSWORD: payguard_secret
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:19092
+      FRAUD_GRPC_TARGET: fraud-service:9093
+      FRAUD_SERVICE_URL: http://fraud-service:8083
+    ports:
+      - "8082:8082"
+
+  fraud-service:
+    image: payguard/fraud-service:latest
+    container_name: payguard-fraud-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-fraud:5432/payguard_fraud
+      SPRING_DATASOURCE_USERNAME: payguard
+      SPRING_DATASOURCE_PASSWORD: payguard_secret
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:19092
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+
   postgres-fraud:
     image: postgres:15-alpine
     container_name: payguard-postgres-fraud

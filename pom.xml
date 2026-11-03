@@ -13,13 +13,13 @@
     <description>PayGuard Payment Processing Platform — Parent POM</description>
 
     <modules>
+        <module>shared</module>
+        <module>payguard-proto</module>
         <module>user-service</module>
         <module>payment-service</module>
         <module>api-gateway</module>
         <module>notification-service</module>
-        <module>shared</module>
         <module>fraud-service</module>
-        <module>payguard-proto</module>
     </modules>
 
     <!-- ===== SPRING BOOT PARENT ===== -->
@@ -43,6 +43,7 @@
         <jackson.datatype.version>2.22.3</jackson.datatype.version>
         <minio.version>9.0.3</minio.version>
         <protobuf.version>4.36.2</protobuf.version>
+        <jib.version>3.5.2</jib.version>
     </properties>
 
     <!-- ===== For controlling versions ===== -->
@@ -159,6 +160,11 @@
                             </exclude>
                         </excludes>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>com.google.cloud.tools</groupId>
+                    <artifactId>jib-maven-plugin</artifactId>
+                    <version>${jib.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

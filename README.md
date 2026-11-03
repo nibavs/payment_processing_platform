@@ -152,3 +152,29 @@ Apache Kafka используется как шина событий. Redis пр
 ### YooKassa
 
 Внешняя платежная система для выполнения платежей. Изменения статуса операций поступают в систему через webhooks.
+
+## Локальная Docker-сборка Payment Service
+
+Jib собирает образ без `Dockerfile` и загружает его в локальный Docker daemon. Из корня репозитория выполните:
+
+```bash
+mvn -pl payment-service -am -Plocal-docker package
+```
+
+`-am` добавляет в Maven reactor зависимости `payguard-proto` и `shared`. После успешной сборки доступны теги `payguard/payment-service:1.0-SNAPSHOT` и `payguard/payment-service:latest`.
+
+Проверить образ можно командой:
+
+```bash
+docker image inspect payguard/payment-service:latest
+```
+
+Для первой сборки Docker должен иметь возможность скачать базовый образ `eclipse-temurin:17-jre`. Если Docker Desktop возвращает ошибку авторизации Docker Hub, выполните `docker logout` и войдите заново через `docker login`.
+
+Запуск сервиса вместе с PostgreSQL и Kafka:
+
+```bash
+docker compose up -d postgres-payments kafka payment-service
+```
+
+Внутри сети Compose сервис автоматически использует `postgres-payments:5432` и `kafka:19092`; HTTP API доступен с хоста на `http://localhost:8082`. Адреса Fraud Service уже заданы как `fraud-service:9093` (gRPC) и `http://fraud-service:8083` (HTTP). Они начнут работать после добавления контейнера Fraud Service с именем `fraud-service` в тот же Compose-проект.

@@ -90,7 +90,46 @@
         </dependency>
     </dependencies>
 
-
+    <profiles>
+        <profile>
+            <id>local-docker</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.google.cloud.tools</groupId>
+                        <artifactId>jib-maven-plugin</artifactId>
+                        <configuration>
+                            <from>
+                                <image>eclipse-temurin:17-jre</image>
+                            </from>
+                            <to>
+                                <image>payguard/payment-service</image>
+                                <tags>
+                                    <tag>${project.version}</tag>
+                                    <tag>latest</tag>
+                                </tags>
+                            </to>
+                            <container>
+                                <mainClass>com.payguard.payment.PaymentServiceApplication</mainClass>
+                                <ports>
+                                    <port>8082</port>
+                                </ports>
+                            </container>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>build-local-docker-image</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>dockerBuild</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
     <build>
         <plugins>
             <plugin>

@@ -29,7 +29,7 @@ public class FraudClient {
                     .scoreTransaction(request);
         } catch (Exception e) {
             log.error("Unexpected error calling Fraud Engine for transaction {}: {}. Using fallback.",
-                    request.getTransactionId(), e.getMessage());
+                    request.getTransactionId(), e.toString());
             return fallbackScore(request.getTransactionId(), new BigDecimal(request.getAmount()));
         }
     }

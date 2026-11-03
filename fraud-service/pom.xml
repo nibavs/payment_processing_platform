@@ -78,6 +78,48 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>local-docker</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.google.cloud.tools</groupId>
+                        <artifactId>jib-maven-plugin</artifactId>
+                        <configuration>
+                            <from>
+                                <image>eclipse-temurin:17-jre</image>
+                            </from>
+                            <to>
+                                <image>payguard/fraud-service</image>
+                                <tags>
+                                    <tag>${project.version}</tag>
+                                    <tag>latest</tag>
+                                </tags>
+                            </to>
+                            <container>
+                                <mainClass>com.payguard.fraud.FraudServiceApplication</mainClass>
+                                <ports>
+                                    <port>8083</port>
+                                    <port>9093</port>
+                                </ports>
+                            </container>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>build-local-docker-image</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>dockerBuild</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
